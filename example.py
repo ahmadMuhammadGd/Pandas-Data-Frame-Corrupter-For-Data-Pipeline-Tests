@@ -1,37 +1,30 @@
-import pandas as pd
 from dataframe_corrupter import DataFrameCorrupter
-from dataframe_corrupter import (
-    AddDuplicateRowsStrategy,
-    AddNegativeValuesStrategy,
-    AddNullsStrategy,
-    AddNoiseStrategy,
-    AddTyposStrategy,
-    DropRowsStrategy
-)
+from dataframe_corrupter import AddDuplicateRowsStrategy, AddNegativeValuesStrategy, AddNoiseStrategy, AddNullsStrategy, AddTyposStrategy, DropRowsStrategy
 
-# Sample DataFrame
-data = {
-    'A': [1, 2, 3, 4, 5],
-    'B': ['foo', 'bar', 'baz', 'qux', 'quux'],
-    'C': [0.1, 0.2, 0.3, 0.4, 0.5]
-}
-df = pd.DataFrame(data)
+import pandas as pd
 
-# Initialize DataFrameCorrupter with strategies
-corrupter = DataFrameCorrupter([
-    (AddDuplicateRowsStrategy(probability=0.7), None),
-    (AddNegativeValuesStrategy(probability=0.3), ['A']),
-    (AddNullsStrategy(probability=0.4), ['C']),
-    (AddNoiseStrategy(noise_level=0), ['A', 'C']),
-    (AddTyposStrategy(probability=0.1), ['B']),
-    (DropRowsStrategy(fraction=0.02), None)
-])
+if __name__ == "__main__":
+    # Sample DataFrame
+    data = {
+        'A': [1, 2, 3, 4, 5],
+        'B': [5, 4, 3, 2, 1],
+        'C': [10, 20, 30, 40, 50],
+        'D': ['apple', 'banana', 'cherry', 'date', 'elderberry']
+    }
+    df = pd.DataFrame(data)
 
-# Apply corruption strategies
-corrupted_df = corrupter.corrupt(df)
+    # Initialize the corrupter with no initial strategies
+    corrupter = DataFrameCorrupter()
 
-print("Original DataFrame:")
-print(df)
+    # Add strategies with specified columns
+    corrupter.add_strategy(AddDuplicateRowsStrategy(probability=0.2))
+    corrupter.add_strategy(DropRowsStrategy(fraction=0.2), columns=['A', 'B'])
+    corrupter.add_strategy(AddNoiseStrategy(noise_level=0.1), columns=['B', 'C'])
+    corrupter.add_strategy(AddNegativeValuesStrategy(probability=0.3), columns=['A', 'C'])
+    corrupter.add_strategy(AddNullsStrategy(probability=0.2), columns=['B'])  # Add Nulls to column B
+    corrupter.add_strategy(AddTyposStrategy(probability=0.2), columns=['D'])  # Add typos to column D
 
-print("\nCorrupted DataFrame:")
-print(corrupted_df)
+    # Apply the corruptions
+    corrupted_df = corrupter.corrupt(df)
+    print("After Applying Chained Corruptions:")
+    print(corrupted_df)

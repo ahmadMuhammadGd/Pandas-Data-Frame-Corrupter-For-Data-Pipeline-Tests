@@ -1,6 +1,10 @@
 # Pandas-Data-Frame-Corrupter-For-Data-Pipeline-Tests
 
-`DataFrameCorrupter` is a Python package designed for data engineering and testing pipelines. It allows you to apply various data corruption strategies to Pandas DataFrames, helping simulate data anomalies and edge cases for testing and development purposes.
+<p align="center">
+  <img src="ReadMeAssets/logo.png" alt="Pandas-Data-Frame-Corrupter-For-Data-Pipeline-Tests">
+</p>
+
+`DataFrameCorrupter` is a Python tool designed for data engineering and testing pipelines. It allows you to apply various data corruption strategies to Pandas DataFrames, helping simulate data anomalies and edge cases for testing and development purposes.
 
 ## Features
 
@@ -41,7 +45,7 @@ corrupter = DataFrameCorrupter([
     (AddDuplicateRowsStrategy(probability=0.2), None),
     (AddNegativeValuesStrategy(probability=0.3), ['A']),
     (AddNullsStrategy(probability=0.1), ['C']),
-    (AddNoiseStrategy(std=0.1), None),
+    (AddNoiseStrategy(std=0.1), columns=['B', 'C']),
     (AddTyposStrategy(probability=0.1), ['B']),
     (DropRowsStrategy(fraction=0.2), None)
 ])
@@ -93,6 +97,18 @@ You can customize the application of strategies by specifying columns when addin
 
 ```python
 corrupter.add_strategy(AddNegativeValuesStrategy(probability=0.3), columns=['A', 'C'])
+```
+### Chain of Corruptions
+You can chain multiple data corruption strategies together using DataFrameCorrupter to simulate various data anomalies and edge cases for testing and development purposes. Each strategy can be applied to specific columns or the entire DataFrame.
+#### Example
+```python
+    corrupter = DataFrameCorrupter()
+    corrupter.add_strategy(AddDuplicateRowsStrategy(probability=0.2))
+    corrupter.add_strategy(DropRowsStrategy(fraction=0.2), columns=['A', 'B'])
+    corrupter.add_strategy(AddNoiseStrategy(noise_level=0.1), columns=['B', 'C'])
+    corrupter.add_strategy(AddNegativeValuesStrategy(probability=0.3), columns=['A', 'C'])
+    corrupter.add_strategy(AddNullsStrategy(probability=0.2), columns=['B'])  # Add Nulls to column B
+    corrupter.add_strategy(AddTyposStrategy(probability=0.2), columns=['D'])  # Add typos to column D
 ```
 
 ## Contributing
