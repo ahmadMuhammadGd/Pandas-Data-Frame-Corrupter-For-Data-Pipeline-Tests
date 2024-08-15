@@ -14,7 +14,8 @@
 
 ## Installation
 
-Clone repository and include `./dataframe_corrupter` in your project directory
+- Clone repository and open it
+- run the command `pip install .`, make sure that you are in the `Pandas-Data-Frame-Corrupter-For-Data-Pipeline-Tests` directory
 
 ## Usage
 
