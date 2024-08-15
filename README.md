@@ -46,7 +46,7 @@ corrupter = DataFrameCorrupter([
     (AddDuplicateRowsStrategy(probability=0.2), None),
     (AddNegativeValuesStrategy(probability=0.3), ['A']),
     (AddNullsStrategy(probability=0.1), ['C']),
-    (AddNoiseStrategy(std=0.1), columns=['B', 'C']),
+    (AddNoiseStrategy(std=0.1), ['B', 'C']),
     (AddTyposStrategy(probability=0.1), ['B']),
     (DropRowsStrategy(fraction=0.2), None)
 ])
